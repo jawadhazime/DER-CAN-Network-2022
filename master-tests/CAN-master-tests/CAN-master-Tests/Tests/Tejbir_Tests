@@ -1,0 +1,114 @@
+#include "FlexCAN_T4.h"
+FlexCAN_T4 <CAN2, RX_SIZE_256, TX_SIZE_16> Can0;
+
+struct message {
+  CAN_message_t msg;
+  int num;
+} lin, rot; // 
+
+
+int linVal;
+int rotVal;
+float linMsg = 0;
+float rotMsg = 0;
+
+
+void canSniff(const CAN_message_t &msg) {
+  Serial.print("MB "); Serial.print(msg.mb);
+  Serial.print("  OVERRUN: "); Serial.print(msg.flags.overrun);
+  Serial.print("  LEN: "); Serial.print(msg.len);
+  Serial.print(" EXT: "); Serial.print(msg.flags.extended);
+  Serial.print(" TS: "); Serial.print(msg.timestamp);
+  Serial.print(" ID: "); Serial.print(msg.id, HEX);
+  Serial.print(" Buffer: ");
+  for ( uint8_t i = 0; i < msg.len; i++ ) {
+    Serial.print(msg.buf[i], HEX); Serial.print(" ");
+  } Serial.println();
+}
+
+float ten2eight(int tenBit){  // MORE INFO
+  float eightBit = 0;
+  float num = (float)tenBit;
+  eightBit = (num/1023)*255;
+  return eightBit;
+}
+
+
+void setup(void) {
+  Serial.begin(115200); delay(400);
+  pinMode(6, OUTPUT); digitalWrite(6, LOW); // enable transceiver
+  Can0.begin();
+  Can0.setClock(CLK_60MHz);
+  Can0.setBaudRate(500000);
+  Can0.setMaxMB(16); // up to 64 max for T4, not important in FIFO mode, unless you want to use additional mailboxes with FIFO
+  Can0.enableFIFO();
+  Can0.enableFIFOInterrupt();
+  Can0.onReceive(canSniff);
+  Can0.mailboxStatus();
+
+  // end setup
+}
+
+void loop() {
+  Can0.events();
+
+  // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
+  linVal = analogRead(0);
+  linMsg = (int)ten2eight(linVal);
+  
+  rotVal = analogRead(1); 
+  rotMsg = (int)ten2eight(rotVal);
+  delay(250);
+
+  lin.msg.id = 0x0C0;
+  rot.msg.id = 0x0C0; //CHANGE ID ???????
+  
+  // Send torque values to motor controller from linear potentiometer
+  static uint32_t timeout = millis();
+  if ( millis() - timeout > 20 ) { // send random frame every 20ms
+    
+    for ( uint8_t i = 0; i < 8; i++ ) {
+
+      //Linear Pot Message----------
+      if(i==0){
+          lin.msg.buf[i] = (uint8_t)potMsg; 
+          }
+      else if(i==4) {
+          lin.msg.buf[i] = 1;
+          }
+      else if(i==5){
+          lin.msg.buf[i] = 1;
+          }
+      else {
+          lin.msg.buf[i] = 0;
+          }
+          
+     //Rot Pot Message--------------
+     if(i==0){
+          rot.msg.buf[i] = (uint8_t)linMsg;
+          }
+      else if(i==4) {
+          rot.msg.buf[i] = 1;
+          }
+      else if(i==5){
+          rot.msg.buf[i] = 1;
+          }
+      else {
+          rot.msg.buf[i] = 0;
+          }
+          
+    }
+
+
+    Can0.write(lin.msg);
+    Can0.write(rot.msg);
+    
+    timeout = millis();
+    canSniff(lin.msg);
+    canSniff(rot.msg);
+    
+    // end loop
+  } 
+
+
+}
