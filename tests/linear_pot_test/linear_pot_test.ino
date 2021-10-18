@@ -1,5 +1,5 @@
 #include "FlexCAN_T4.h"
-FlexCAN_T4 <CAN2, RX_SIZE_256, TX_SIZE_16> Can0;
+FlexCAN_T4 <CAN1, RX_SIZE_256, TX_SIZE_16> Can0;
 
 struct potentiometer {
   int val = 0;
@@ -27,7 +27,7 @@ float ten2eight(int tenBit) {
 
 void setup(void) {
   Serial.begin(115200); delay(400);
-  pinMode(6, OUTPUT); digitalWrite(6, LOW); // enable transceiver
+  pinMode(6, OUTPUT); // digitalWrite(6, LOW); // enable transceiver
   Can0.begin();
   Can0.setClock(CLK_60MHz);
   Can0.setBaudRate(125000);
