@@ -20,9 +20,8 @@ void canSniff(const CAN_message_t &msg) {
 }
 
 float twelve2eight(int twelveBit){
-  float eightBit = 0;
-  float num = (float)twelveBit;
-  eightBit = (num/4095)*255;
+    
+  eightBit = twelveBit >> 4;
   return eightBit;
 }
 
