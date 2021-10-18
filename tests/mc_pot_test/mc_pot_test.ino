@@ -20,9 +20,7 @@ static uint32_t timeout = 0; // Initial timeout value
 
 // Converts analog input from 10bit to 8bit for packaging as a CAN Message
 float ten2eight(int tenBit){
-  float eightBit = 0;
-  float num = (float)tenBit;
-  eightBit = (num/1023)*255;
+  eightBit = tenBit >> 2;   
   return eightBit;
 }
 
