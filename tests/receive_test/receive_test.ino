@@ -1,5 +1,5 @@
 #include "FlexCAN_T4.h"
-FlexCAN_T4 <CAN2, RX_SIZE_256, TX_SIZE_16> Can0;
+FlexCAN_T4 <CAN1, RX_SIZE_256, TX_SIZE_16> Can0;
 
 struct potentiometer {
   int val = 0;
@@ -7,6 +7,7 @@ struct potentiometer {
 } pot;
 
 void canSniff(const CAN_message_t &msg) {
+  int message_val; //store value being sent as int 
   Serial.print("MB "); Serial.print(msg.mb);
   Serial.print("  OVERRUN: "); Serial.print(msg.flags.overrun);
   Serial.print("  LEN: "); Serial.print(msg.len);
@@ -16,7 +17,12 @@ void canSniff(const CAN_message_t &msg) {
   Serial.print(" Buffer: ");
   for ( uint8_t i = 0; i < msg.len; i++ ) {
     Serial.print(msg.buf[i], HEX); Serial.print(" ");
+    if (i == 0) {
+      message_val = msg.buf[i];
+      }
   } Serial.println();
+    Serial.println("Your value is: "); Serial.print(message_val, HEX);
+
 }
 
 float ten2eight(int tenBit) {
@@ -44,36 +50,35 @@ void loop() {
   Can0.events();
 
   // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
-  pot.val = analogRead(A6);
-  pot.msg = (int)ten2eight(pot.val);
-  Serial.print(pot.msg);
+ // pot.val = analogRead(A6);
+ // pot.msg = (int)ten2eight(pot.val);
+ // Serial.print(pot.msg);
   delay(250);
 
   // Send torque values to motor controller from linear potentiometer
   static uint32_t timeout = millis();
   if ( millis() - timeout > 20 ) { // send random frame every 20ms
     CAN_message_t msg;
-    msg.id = 0x0C0;
+    if ( Can0.read(msg) ) {
+    Serial.print("CAN1 "); 
+    Serial.print("MB: "); Serial.print(msg.mb);
+    Serial.print("  ID: 0x"); Serial.print(msg.id, HEX );
+    Serial.print("  EXT: "); Serial.print(msg.flags.extended );
+    Serial.print("  LEN: "); Serial.print(msg.len);
+    Serial.print(" DATA: ");
     for ( uint8_t i = 0; i < 8; i++ ) {
-      if (i == 0) {
-        msg.buf[i] = (uint8_t)pot.msg;
-        // test case for sending a constant value is msg.buf[i] = 5;
-      }
-      else if (i == 4) {
-        msg.buf[i] = 1;
-      }
-      else if (i == 5) {
-        msg.buf[i] = 1;
-      }
-      else {
-        msg.buf[i] = 0;
-      }
+      Serial.print(msg.buf[i]); Serial.print(" ");
     }
+    Serial.print("  TS: "); Serial.println(msg.timestamp);
+  }
 
-    Can0.write(msg);
+    msg.id = 0x0C0;
+
+    Can0.read(msg);
     timeout = millis();
     canSniff(msg);
 
     // end loop
+
   }
 }
