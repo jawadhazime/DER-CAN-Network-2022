@@ -15,7 +15,7 @@ void genTemp(message &msg){
 
 void checkSum(message &sum){
   sum.checksum = 0;
-  for (int i = 0; i < 6; i++){
+  for (int i = 0; i < 7; i++){
     sum.checksum += sum.msg.buf[i];  // 1. Sum of the data
   }
   sum.checksum += (57+8); // Add 0x39 & Data Length
@@ -53,11 +53,11 @@ void loop() {
   static uint32_t timeout = millis();
   if ( millis() - timeout > 2000 ) { // send random frame every 2000ms
 
-    bms.msg.id = 0x1839F380; // module #2
+    bms.msg.id = 0x1839F380; // module #1
     bms.msg.flags.extended = 1;
 
     genTemp(bms);
-    bms.msg.buf[0] = 0;  // module #2
+    bms.msg.buf[0] = 0;  // module #1
     bms.msg.buf[1] = bms.lowTemp; // random low data
     bms.msg.buf[2] = bms.highTemp; // random high data
     bms.msg.buf[3] = bms.avgTemp; // poor avg calc
