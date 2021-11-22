@@ -16,9 +16,9 @@ void genTemp(message &msg){
 void checkSum(message &sum){
   sum.checksum = 0;
   for (int i = 0; i < 7; i++){
-    sum.checksum += sum.msg.buf[i];  // 1. Sum of the data
+    sum.checksum += sum.msg.buf[i];  // Sum of the data on bytes 1-7
   }
-  sum.checksum += (57+8); // Add 0x39 & Data Length
+  sum.checksum += (57+8); // Add 0x39 (ID) & Data Length
 }
 
 void canSniff(const CAN_message_t &msg) {
