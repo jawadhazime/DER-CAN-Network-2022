@@ -25,11 +25,6 @@ void canSniff(const CAN_message_t &msg) {
 
 }
 
-float ten2eight(int tenBit) {
-  int eightBit = tenBit >> 2;
-  return eightBit;
-}
-
 
 void setup(void) {
   Serial.begin(115200); delay(400);
@@ -49,17 +44,8 @@ void setup(void) {
 void loop() {
   Can0.events();
 
-  // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
- // pot.val = analogRead(A6);
- // pot.msg = (int)ten2eight(pot.val);
- // Serial.print(pot.msg);
-  delay(250);
-
-  // Send torque values to motor controller from linear potentiometer
-  static uint32_t timeout = millis();
-  if ( millis() - timeout > 20 ) { // send random frame every 20ms
     CAN_message_t msg;
-    if ( Can0.read(msg) ) {
+    if (Can0.read(msg)) {
     Serial.print("CAN1 "); 
     Serial.print("MB: "); Serial.print(msg.mb);
     Serial.print("  ID: 0x"); Serial.print(msg.id, HEX );
@@ -70,15 +56,11 @@ void loop() {
       Serial.print(msg.buf[i]); Serial.print(" ");
     }
     Serial.print("  TS: "); Serial.println(msg.timestamp);
-  }
 
-    msg.id = 0x0C0;
 
-    Can0.read(msg);
-    timeout = millis();
-    canSniff(msg);
+//    Can0.read(msg);
+//    canSniff(msg);
 
-    // end loop
 
   }
 }
