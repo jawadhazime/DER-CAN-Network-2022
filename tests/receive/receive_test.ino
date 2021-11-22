@@ -25,7 +25,7 @@ void canSniff(const CAN_message_t &msg) {
 
 }
 
-
+// Sid makes bad Drive organization 
 void setup(void) {
   Serial.begin(115200); delay(400);
   pinMode(6, OUTPUT); // digitalWrite(6, LOW); // enable transceiver
