@@ -78,7 +78,7 @@ void loop() {
     Serial.print("Tooth Down: ");
     Serial.print(ws.down);
     Serial.print("\n");
-    ws.spd = (ws.count/52) * 8.27; // divide count by the number of teeth, and then multplie by the mph ratio
+    ws.spd = (ws.count/52) * 8.27; // divide count by the number of teeth, and then multiply by the mph ratio
     for ( uint8_t i = 0; i < 8; i++ ) {
       if(i==0){msg.buf[i] = (uint8_t)ws.spd;}
       else if(i==4){msg.buf[i] = 1;}
