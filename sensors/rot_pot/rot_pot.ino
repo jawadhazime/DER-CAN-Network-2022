@@ -19,7 +19,7 @@ void canSniff(const CAN_message_t &msg) {
   } Serial.println();
 }
 
-float twelve2eight(int twelveBit){
+int twelve2eight(int twelveBit){
     
   int eightBit = twelveBit >> 4;
   return eightBit;
@@ -45,7 +45,7 @@ void loop() {
 
   // Convert rotary potentiometer (reads from PinA0) from 12bit to 8bit to send via CAN
   steer.val = analogRead(0);
-  steer.msg = (int)twelve2eight(steer.val);
+  steer.msg = twelve2eight(steer.val);
 
   // Send wheel speed via critical bus every 200ms.
   static uint32_t timeout = millis();

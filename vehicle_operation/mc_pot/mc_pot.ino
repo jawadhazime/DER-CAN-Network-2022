@@ -19,7 +19,7 @@ static uint32_t timeout = 0; // Initial timeout value
 //-----------------------------------------
 
 // Converts analog input from 10bit to 8bit for packaging as a CAN Message
-float ten2eight(int tenBit){
+int ten2eight(int tenBit){
   int eightBit = tenBit >> 2;   
   return eightBit;
 }
@@ -124,7 +124,7 @@ void loop() {
     if (torqReady == true){
       // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
       potVal = analogRead(0);
-      potMsg = (int)max((ten2eight(potVal)/51),1); // Limit torque to 1 to 5Nm
+      potMsg = max((ten2eight(potVal)/51),1); // Limit torque to 1 to 5Nm
       t.msg.id = 0x0C0;
       for ( uint8_t i = 0; i < 8; i++ ) {
         if(i==0){t.msg.buf[i] = (uint8_t)potMsg;}

@@ -26,10 +26,10 @@ void canSniff(const CAN_message_t &msg) {
 
 }
 
-float ten2eight(int tenBit) {
+/*int ten2eight(int tenBit) {
   int eightBit = tenBit >> 2;
   return eightBit;
-}
+}*/
 
 
 void setup(void) {
@@ -52,7 +52,7 @@ void loop() {
 
   // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
  // pot.val = analogRead(A6);
- // pot.msg = (int)ten2eight(pot.val);
+ // pot.msg = ten2eight(pot.val);
  // Serial.print(pot.msg);
   delay(250);
 
