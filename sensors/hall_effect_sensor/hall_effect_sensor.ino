@@ -47,7 +47,7 @@ void loop() {
   Can0.events();
 
   // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
-  ws.val = analogRead(0);
+  ws.val = analogRead(7);
   ws.msg = ten2eight(ws.val);
 
   // Send wheel speed via critical bus every 1s.
@@ -55,7 +55,7 @@ void loop() {
 
   if ( millis() - timeout > 10 ) { // count teeth every 10ms
     if (ws.msg == 255) {ws.up = true;}
-    if (ws.msg == 0) {ws.down = true;}
+    if (ws.msg < 40) {ws.down = true;}
     if (ws.up == true && ws.down == true){
       ws.count++;
       ws.up = false;
@@ -79,7 +79,7 @@ void loop() {
     Serial.print(ws.down);
     Serial.print("\n");
     ws.spd = (ws.count/52) * 8.27; // divide count by the number of teeth, and then multiply by the mph ratio
-    for ( uint8_t i = 0; i < 8; i++ ) {
+    for ( uint8_t i = 0; i < 8; i++ ) { 
       if(i==0){msg.buf[i] = (uint8_t)ws.spd;}
       else if(i==4){msg.buf[i] = 1;}
       else if(i==5){msg.buf[i] = 1;}
