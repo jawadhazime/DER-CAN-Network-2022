@@ -23,7 +23,7 @@ void canSniff(const CAN_message_t &msg) {
   } Serial.println();
 }
 
-float ten2eight(int tenBit){
+int ten2eight(int tenBit){
   int eightBit = tenBit >> 2;   
   return eightBit;
 }
@@ -48,7 +48,7 @@ void loop() {
 
   // Convert potentiometer reads from Pin0 from 10bit to 8bit to send via CAN
   ws.val = analogRead(0);
-  ws.msg = (int)ten2eight(ws.val);
+  ws.msg = ten2eight(ws.val);
 
   // Send wheel speed via critical bus every 1s.
   static uint32_t timeout = millis();

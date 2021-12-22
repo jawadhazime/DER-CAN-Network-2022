@@ -441,11 +441,11 @@ FCTP_CLASS class FlexCAN_T4 : public FlexCAN_T4_Base {
     void mbCallbacks(const FLEXCAN_MAILBOX &mb_num, const CAN_message_t &msg);
 };
 
-#include "C:\Users\wille\Dropbox (University of Michigan)\umich\SAE\2022\GitLab\CAN-master-Tests.tar\CAN-master-Tests\CAN-master-Tests\Tests\rot_pot_sensor_200227\FlexCAN_T4.tpp"
+#include "FlexCAN_T4_template.h"
 
 #if defined(__IMXRT1062__)
-#include "C:\Users\wille\Dropbox (University of Michigan)\umich\SAE\2022\GitLab\CAN-master-Tests.tar\CAN-master-Tests\CAN-master-Tests\Tests\rot_pot_sensor_200227\FlexCAN_T4FD.tpp"
-#include "C:\Users\wille\Dropbox (University of Michigan)\umich\SAE\2022\GitLab\CAN-master-Tests.tar\CAN-master-Tests\CAN-master-Tests\Tests\rot_pot_sensor_200227\FlexCAN_T4FDTimings.tpp"
+#include "FlexCAN_T4FD_template.h"
+#include "FlexCAN_T4FDTimings_template.h"
 #endif
 
 #endif

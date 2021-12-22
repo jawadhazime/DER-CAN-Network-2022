@@ -23,8 +23,8 @@ void canSniff(const CAN_message_t &msg) {
   } Serial.println();
 }
 
-float ten2eight(int tenBit){
-  eightBit = tenBit >> 2;   
+int ten2eight(int tenBit){
+  int eightBit = tenBit >> 2;   
   return eightBit;
 }
 
@@ -55,7 +55,7 @@ void loop() {
   Can0.events();
 
   pot.val = analogRead(0);
-  pot.tx = (int)ten2eight(pot.val);
+  pot.tx = ten2eight(pot.val);
 
   static uint32_t timeout = millis();
   if ( millis() - timeout > 8 ) { // send random frame every 8ms
