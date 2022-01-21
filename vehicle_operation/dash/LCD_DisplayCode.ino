@@ -1,7 +1,8 @@
+
 // Import the Liquid Crystal library
 #include <LiquidCrystal.h>
 //Initialise the LCD with the arduino. LiquidCrystal(rs, enable, d4, d5, d6, d7)
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
 
  int temperature;
  int speedc;
@@ -30,13 +31,13 @@ void setup() {
 
 void DisplayTempSpeed(int temperature, int speedc){
 
-  /*
+  
   lcd.setCursor(0,1);
   lcd.print("TEMP: ");
   lcd.setCursor(6, 1);
   lcd.print(temperature);
  
-   */
+   
   lcd.setCursor(0,0);
   lcd.print("SPEED: ");
   lcd.setCursor(6, 0);
@@ -49,18 +50,18 @@ delay(1500);
   return;
 }
 
-/*
+
 void BMSfault(){
  BFault = HIGH;
  BMS = true;
 
-}*/
+}
 
 void loop() {
   lcd.clear();
 
- //temperature = random(0,35);
- // speedc = random(20, 100);
+ temperature = random(0,35);
+  speedc = random(20, 100);
     temperature = 0+i;
   speedc = 10+i;
   DisplayTempSpeed(temperature, speedc);
@@ -68,40 +69,33 @@ void loop() {
 
 
 }
-/*
-//if(n==1){
 
-  //  lcd.clear();
-  //  lcd.setCursor(0,0);
-  //  lcd.print("Fault");
-//}
-//while(n==1){
- // delay(100);
-//}*/
+if(n==1){
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Fault");
+}
+while(n==1){
+  delay(100);
+}
 
 
-  /*
+  
   lcd.print("10 Seconds Clock");
   for( int i = 0; i < 10; i++){
     delay(1000);
   lcd.setCursor(i, 1);
- // lcd.setCursor(0, (1*millis()/1000));
-  // print the number of seconds since reset:
+  lcd.setCursor(0, (1*millis()/1000));
+   print the number of seconds since reset:
   lcd.print(i);
-  //lcd.print(millis()/1000);
+  lcd.print(millis()/1000);
   }
   lcd.clear();
   lcd.print("10 Seconds");
   delay(1000);
-  */
+  
 
-
-
-
-
-
-
-/*
 void TempDisplay(int temperature){
   lcd.setCursor(0,1);
   lcd.print("TEMP: ");
@@ -119,5 +113,3 @@ void SpeedDisplay(int speedc){
   delay(100);
   return;
 }
-
-*/
