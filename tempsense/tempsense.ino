@@ -51,7 +51,7 @@ void loop() {
   Can0.events();
 
   static uint32_t timeout = millis();
-  if ( millis() - timeout > 2000 ) { // send random frame every 2000ms
+  if ( millis() - timeout > 100 ) { // send frame(s) every 100ms
 
     bms.msg.id = 0x1839F380; // module #1
     bms.msg.flags.extended = 1;
