@@ -116,7 +116,21 @@ void canSniff(const CAN_message_t &msg) {
 
 //----------------------------------------------------------------------------------------------------------------------------
 void setup(void) {
-  Serial.begin(115200); delay(400);
+  Serial.begin(115200); 
+  delay(400);
+  
+  //set voltage mux pins as inputs
+  for(int i = 0; i < 9; i++)
+  {
+    pinMode(muxInputPin[i], INPUT);
+  }
+
+  //set mux controls as output
+  for(int i = 0; i < 3; i++)
+  {
+    pinMode(controlPin[i], OUTPUT);
+  }
+
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // enable transceiver
   Can0.begin();
   Can0.setClock(CLK_60MHz);
