@@ -7,6 +7,8 @@ struct message {
   uint8_t lowTemp=15, highTemp=20, avgTemp;
 } bms;
 
+CAN_message_t therm;
+
 void genTemp(message &msg){
   msg.lowTemp++;
   msg.highTemp++;
@@ -47,12 +49,15 @@ void setup(void) {
   Can0.mailboxStatus();
 }
 
+int thermistor_read = 0; //cycles through thermistors #0-71
+
 void loop() {
   Can0.events();
 
   static uint32_t timeout = millis();
   if ( millis() - timeout > 100 ) { // send frame(s) every 100ms
 
+    //Thermistor Module -> BMS Broadcast : ID 0x1839F380
     bms.msg.id = 0x1839F380; // module #1
     bms.msg.flags.extended = 1;
 
@@ -62,15 +67,36 @@ void loop() {
     bms.msg.buf[2] = bms.highTemp; // random high data
     bms.msg.buf[3] = bms.avgTemp; // poor avg calc
     bms.msg.buf[4] = 72; // number of therms
-    bms.msg.buf[5] = 0;
-    bms.msg.buf[6] = 0;
+    bms.msg.buf[5] = 71; // Highest thermistor ID (zero based) on module #1
+    bms.msg.buf[6] = 0; // Lowest thermistor ID (zero based) on module #1
 
     checkSum(bms);
     bms.msg.buf[7] = bms.checksum;  // checksum, we need to figure out how to do this
 
-    
     Can0.write(bms.msg);
-    timeout = millis();
     canSniff(bms.msg);
+
+    //Thermistor General Broadcast : ID 0x1838F380
+    therm.id = 0x1838F380;
+    therm.flags.extended = 1;
+
+    therm.buf[0] = 0;  // Thermistor ID - MSB (>255)
+    therm.buf[1] = thermistor_read; // Thermistor ID - LSB (0-255)
+    therm.buf[2] = 0; // Thermistor value - TBD
+    therm.buf[3] = 72; // number of therms
+    therm.buf[4] = bms.lowTemp; // Lowest thermistor value
+    therm.buf[5] = bms.highTemp; // Highest thermistor value
+    therm.buf[6] = 71; // Highest thermistor ID (zero based) on module #1
+    therm.buf[7] = 0; // Lowest thermistor ID (zero based) on module #1
+    
+    Can0.write(therm);
+    canSniff(therm);
+
+    thermistor_read++;
+    if (thermistor_read > 71) // therm #71 is the last, reset counter to 0
+      thermistor_read = 0;
+
+    timeout = millis();
+
   }
 }
