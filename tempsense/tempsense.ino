@@ -4,7 +4,7 @@ FlexCAN_T4 <CAN2, RX_SIZE_256, TX_SIZE_16> Can0;
 struct message {
   CAN_message_t msg;
   uint8_t checksum;
-  uint8_t lowTemp=15, highTemp=20, avgTemp;
+  uint8_t lowTemp, highTemp, avgTemp=0;
 } bms;
 
 CAN_message_t therm;
@@ -16,6 +16,9 @@ int muxInputPin[9] = {A1, A2, A3, A4, A5, A6, A7, A8, A9};
 int control[3] = {0,0,0}; 
 int controlPin[3] = {5, 4, 3};
                   //{A, B, C} Most significant bit is C
+
+//int fault = 0;
+//int faultPin = 14;
 
 //matrix of indices to sort thermistor values
 int therm_index[9][8] = 
@@ -31,8 +34,9 @@ int therm_index[9][8] =
   {70, 71, 72, 69, 65, 68, 66, 67} // Mux 9
 };
 
-double val = 0.0000;
-double avgADC[72];
+double adcTemperature[72];
+double analogTemperature[72];
+double temperature[72];
 
 int thermistor_read = 0; //cycles through thermistors #0-71
 
@@ -56,8 +60,11 @@ void setMuxControl(int i)
 //----------------------------------------------------------------------------------------------------------------------------
 void getMuxValues()
 {
-  //read in cell voltages and add them to avgADC
-  for(int l = 0; l<500; l++){
+  int data_samples = 100;
+  double val = 0.0000;
+  
+  //read thermistor values and add them to adcTemperature[]
+  for(int l = 0; l<data_samples; l++){
     
     for(int j = 0; j < 8; j++)
     {
@@ -67,29 +74,109 @@ void getMuxValues()
       
       for(int i = 0; i < 9; i++)
       {     
-        //read in j'th voltage from i'th mux and convert to voltage
+        //read j'th thermistor from i'th mux
         val = analogRead(muxInputPin[i]);
-  
-        avgADC[therm_index[i][j] - 1] +=  val;
+        adcTemperature[therm_index[i][j] - 1] +=  val;
       }
     }
   }
   
   for(int i = 0; i<72; i++){
-    avgADC[i] = avgADC[i]/500.0;
+    adcTemperature[i] = adcTemperature[i]/data_samples;
   }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+void calculateTemperature()
+{
+  for(int i = 0; i<72;i++){
+
+    analogTemperature[i] = (adcTemperature[i]/1023.0) * 3.300; 
+    temperature[i] = (analogTemperature[i]-0.5)/0.01; //TBD: Proper TF
+
+  }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+void printTemp()
+{
+  for(int i = 0; i<72;i++){
+
+    Serial.print("Stack ");
+    Serial.print((i/8)+1);
+    Serial.print(" ");
+
+    Serial.print("Slot ");
+    Serial.print(i + 1);
+    Serial.print(": ");
+    
+    Serial.print("ADC Temperature ");
+    Serial.print(i + 1);
+    Serial.print(": ");
+    Serial.print(adcTemperature[i]);
+    Serial.print(" ");
+    
+    Serial.print("Analog Temperature ");
+    Serial.print(i + 1);
+    Serial.print(": ");
+    Serial.print(analogTemperature[i],4);
+    Serial.print(" ");
+    
+    Serial.print(" Temperature ");
+    Serial.print(i + 1);
+    Serial.print(": ");
+    Serial.print(temperature[i],4);
+    Serial.print("\n");
+  }
+  //if(fault == 1){
+  //    Serial.println("VOLTAGE FAULT");
+  //    }
+  //else {
+  //  Serial.println("VOLTAGE OK");
+  //}TBD
+  Serial.print("\n");
+  Serial.print("\n");
+  Serial.print("\n");
 }
 
 //----------------------------------------------------------------------------------------------------------------------------
 void getTemp(message &msg){
   
-  getMuxValues();
-  
-  
-  msg.lowTemp++;
-  msg.highTemp++;
-  msg.avgTemp = (msg.lowTemp + msg.highTemp)/2;
+  double val = 0;
+
+  getMuxValues(); //Obtain ADC values
+  calculateTemperature(); //Convert ADC values into temperature readings in temperature[]
+  printTemp();
+
+  msg.lowTemp = temperature[0];
+  msg.highTemp = temperature[0];
+  val = temperature[0];
+
+  for (int i = 1; i < 72; i++){
+    if (msg.lowTemp > temperature[i])
+      msg.lowTemp = temperature[i];
+    
+    if (msg.highTemp < temperature[i])
+      msg.highTemp = temperature[i];
+
+    val += temperature[i];
+  }
+  msg.avgTemp = val/72;
 }
+
+//-------------------------------------------------------------------------------------------------------------------
+/*void checkFault()
+{
+  int high_cell_voltage; //TBD: Update based on BMS OP on CAN
+  int low_cell_voltage; //TBD: Update based on BMS OP on CAN
+
+  if(high_cell_voltage[i] > 4.0 || low_cell_voltage[i] < 3.0){
+    fault = 1;
+    digitalWrite(faultPin, fault);
+    }
+  else
+    fault = 0;
+}*/
 
 //----------------------------------------------------------------------------------------------------------------------------
 void checkSum(message &sum){
@@ -114,12 +201,22 @@ void canSniff(const CAN_message_t &msg) {
   } Serial.println();
 }
 
+//-------------------------------------------------------------------------------------------------------------------
+void clearValues()
+{
+  for(int i = 0; i < 72; i++){
+    adcTemperature[i] = 0;
+    analogTemperature[i] = 0;
+    temperature[i] = 0;
+  }
+}
+
 //----------------------------------------------------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(115200); 
   delay(400);
   
-  //set voltage mux pins as inputs
+  //set mux output pins as inputs
   for(int i = 0; i < 9; i++)
   {
     pinMode(muxInputPin[i], INPUT);
@@ -131,6 +228,9 @@ void setup(void) {
     pinMode(controlPin[i], OUTPUT);
   }
 
+  //setup fault LED
+  //pinMode(faultPin,OUTPUT);TBD
+  
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // enable transceiver
   Can0.begin();
   Can0.setClock(CLK_60MHz);
@@ -153,7 +253,7 @@ void loop() {
     bms.msg.id = 0x1839F380; // module #1
     bms.msg.flags.extended = 1;
 
-    getTemp(bms); //TBD
+    getTemp(bms);
     bms.msg.buf[0] = 0;  // module #1
     bms.msg.buf[1] = bms.lowTemp; // Lowest thermistor value
     bms.msg.buf[2] = bms.highTemp; // Highest thermistor value
@@ -174,7 +274,7 @@ void loop() {
 
     therm.buf[0] = 0;  // Thermistor ID - MSB (>255)
     therm.buf[1] = thermistor_read; // Thermistor ID - LSB (0-255)
-    therm.buf[2] = 0; // Thermistor value - TBD
+    therm.buf[2] = temperature[thermistor_read]; // Thermistor value
     therm.buf[3] = 72; // number of therms
     therm.buf[4] = bms.lowTemp; // Lowest thermistor value
     therm.buf[5] = bms.highTemp; // Highest thermistor value
@@ -188,7 +288,9 @@ void loop() {
     if (thermistor_read > 71) // therm #71 is the last, reset counter to 0
       thermistor_read = 0;
 
-    timeout = millis();
+    //checkFault(); //based on low and high cell voltage from BMS
 
+    timeout = millis();
+    clearValues();
   }
 }
