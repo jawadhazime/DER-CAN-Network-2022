@@ -92,7 +92,10 @@ void calculateTemperature()
   for(int i = 0; i<72;i++){
 
     analogTemperature[i] = (adcTemperature[i]/1023.0) * 3.300; 
-    temperature[i] = (analogTemperature[i]-0.5)/0.01; //TBD: Proper TF
+    temperature[i] = ((537.11*pow(analogTemperature[i],6)) - (6749*pow(analogTemperature[i],5)) 
+                    + (34799*pow(analogTemperature[i],4)) - (94465*pow(analogTemperature[i],3)) 
+                    + (142663*pow(analogTemperature[i],2)) - (113923*analogTemperature[i]) + 37735);
+                    //Transfer function based on thermistor data
 
   }
 }
@@ -230,7 +233,7 @@ void setup(void) {
 
   //setup fault LED
   //pinMode(faultPin,OUTPUT);TBD
-  
+
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // enable transceiver
   Can0.begin();
   Can0.setClock(CLK_60MHz);
