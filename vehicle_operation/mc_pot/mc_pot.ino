@@ -50,7 +50,6 @@ void canSniff(const CAN_message_t &msg) {
 
 void setup(void) {
   Serial.begin(115200); delay(400);
-  pinMode(6, OUTPUT); digitalWrite(6, LOW); // enable transceiver
   Can0.begin();
   Can0.setClock(CLK_60MHz);
   Can0.setBaudRate(500000);
@@ -87,7 +86,6 @@ void loop() {
   Can0.events();
   
   // send frame every 20ms
-  timeout = millis();
   if ( millis() - timeout > 20 ) {
     Serial.print(timeout);
     //-----------------------------------------
