@@ -275,8 +275,8 @@ void loop() {
     therm.id = 0x1838F380;
     therm.flags.extended = 1;
 
-    therm.buf[0] = 0;  // Thermistor ID - MSB (>255)
-    therm.buf[1] = thermistor_read; // Thermistor ID - LSB (0-255)
+    therm.buf[0] = thermistor_read; // Thermistor ID - LSB (0-255)
+    therm.buf[1] = 0;  // Thermistor ID - MSB (>255)
     therm.buf[2] = temperature[thermistor_read]; // Thermistor value
     therm.buf[3] = 72; // number of therms
     therm.buf[4] = bms.lowTemp; // Lowest thermistor value
