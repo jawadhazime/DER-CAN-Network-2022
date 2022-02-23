@@ -21,7 +21,18 @@ _should be able to fit this into one CAN message_
 
 
 ## Faults 
+- need to read pins
 - BSPD HIGH
 - BMS fault
 - IMD fault
-- 3 values (bool!)  
+- 3 values (bool!) 
+
+
+## What is Needed
+- pin numbers off schematic
+- values for faults (unless they are activated by the digital pins) 
+
+
+
+
+_tldr; need to get values from 17 pins?_
