@@ -1,21 +1,14 @@
 #include "FlexCAN_T4.h"
+#define MESSAGE_SIZE 8
 FlexCAN_T4 <CAN1, RX_SIZE_256, TX_SIZE_16> Can0;
+FlexCAN_T4 <CAN2, RX_SIZE_265, TX_SIZE_16> Can1;
 
-struct accelerometerX {
-  int val = 0;
-  float msg = 0;
-} accelX;
+// create two arrays for the CAN messages
+int VehicleDynamics_ID = NULL; 
+int VehicleDynamics[8]; // goes to critical CAN : contains shock vals, accelerometer,  & steering angle
 
-struct accelerometerY {
-  int val = 0;
-  float msg = 0;
-} accelY;
-
-struct accelerometerZ {
-  int val = 0;
-  float msg = 0;
-} accelZ;
-
+int FaultMessages_ID = NULL;
+int FaultMessages[3]; // goes to Data CAN & logs system faults
 
 void canSniff(const CAN_message_t &msg) {
   Serial.print("MB "); Serial.print(msg.mb);
@@ -35,7 +28,7 @@ int ten2eight(int tenBit) {
   return eightBit;
 }
 
-
+// NEEDS TO BE DONE: setting digital pins as input & outputs 
 void setup(void) {
   Serial.begin(115200); delay(400);
   pinMode(6, OUTPUT); // digitalWrite(6, LOW); // enable transceiver
@@ -54,15 +47,20 @@ void setup(void) {
 void loop() {
   Can0.events();
 
-  // Take accelerometer values via analog pins
-  //  accelX.val = analogRead(AX);
-  //  accelY.val = analogRead(AY);
-  //  accelZ.val = analogRead(AZ);
-
-//  Serial.print(accelX.val);
-  // Convert?
-  //  pot.msg = ten2eight(pot.val);
-  //  Serial.print(pot.msg);
+  // Get analog samples from pins
+  vehicleDynamics[0] = ten2eight(%INSERT NUMBER HERE); // steering angle
+  vehicleDynamics[1] = ten2eight(%INSERT NUMBER HERE); // FR shock
+  vehicleDynamics[2] = ten2eight(%INSERT NUMBER HERE); // FL shock 
+  vehicleDynamics[3] = ten2eight(%INSERT NUMBER HERE); // RR shock
+  vehicleDynamics[4] = ten2eight(%INSERT NUMBER HERE); // RL shock
+  vehicleDynamics[5] = ten2eight(%INSERT NUMBER HERE); // AccelX
+  vehicleDynamics[6] = ten2eight(%INSERT NUMBER HERE); // AccelY
+  vehicleDynamics[7] = ten2eight(%INSERT NUMBER HERE); // AccelZ
+  
+  // get digital inputs for faults  
+  FaultMessages[0] =  // BSPD HIGH
+  FaultMessages[1] = // BMS FAULT
+  FaultMessages[2] = // IMD
   delay(250);
 
   //  // Send torque values to motor controller from linear potentiometer
