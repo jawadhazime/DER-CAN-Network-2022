@@ -36,6 +36,12 @@ BS_:
 BU_: TCU CANedge BMS TempSense INV U2C VCU
 
 
+BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
+ SG_ ShockTravel_RL : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ ShockTravel_RR : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ ShockTravel_FL : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ ShockTravel_FR : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+
 BO_ 208 TCU1: 8 TCU
  SG_ SteeringAngle : 48|8@1- (1,0) [-128|127] ""  CANedge
  SG_ WS4 : 40|8@1+ (1,0) [0|255] ""  CANedge
@@ -324,6 +330,7 @@ CM_ BU_ BMS "BMS Master";
 CM_ BU_ INV "The Cascadia Motion inverter";
 CM_ BU_ U2C "Delphi DC/DC Converter";
 CM_ BU_ VCU "The system vehicle control unit";
+CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
 CM_ SG_ 229 CurrentLimitStatus "This value is provided so the reasons for why a current limit (either Charge Current Limit or Discharge Current Limit are being reduced by the BMS from the maximum allowable current.";
 CM_ SG_ 229 AveragePackCurrent "This is the AVERAGE current pack amperage value for the battery pack. This will report a constant 0 if no current sensor is selected. The average is taken over the last 1 second of operation so it will lag the instantaneous pack current value.";
 CM_ SG_ 228 TotalPackCycles "This is the total number of cycles that the battery pack has been put through since the BMS has started keeping track.";
