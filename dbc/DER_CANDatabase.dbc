@@ -36,7 +36,7 @@ BS_:
 BU_: Shutdown TCU CANedge BMS TempSense INV U2C VCU
 
 
-BO_ 240 Shock_IMU: 7 Shutdown
+BO_ 272 Shock_IMU: 7 Shutdown
  SG_ ShockTravel_RR : 16|8@1+ (1,0) [0|255] ""  CANedge
  SG_ ShockTravel_RL : 24|8@1+ (1,0) [0|255] ""  CANedge
  SG_ ShockTravel_FR : 0|8@1+ (1,0) [0|255] ""  CANedge
@@ -55,51 +55,51 @@ BO_ 208 TCU1: 8 TCU
  SG_ TP1 : 0|8@1+ (1,0) [0|100] "%"  CANedge
  SG_ BrakeTransducer : 56|8@1+ (1,0) [0|0] ""  CANedge
 
-BO_ 237 BMS14: 4 BMS
+BO_ 253 BMS14: 4 BMS
  SG_ DTCStatus2 : 16|16@1+ (1,0) [0|65535] ""  CANedge
  SG_ DTCStatus1 : 0|16@1+ (1,0) [0|65535] ""  CANedge
 
-BO_ 236 BMS13: 7 BMS
+BO_ 252 BMS13: 7 BMS
  SG_ J1772PlugState : 48|8@1+ (1,0) [0|4] ""  CANedge
  SG_ J1772ACVoltage : 32|16@1+ (0.1,0) [0|0] "VAC"  CANedge
  SG_ J1772ACPowerLimit : 16|16@1+ (1,0) [0|0] "WattAC"  CANedge
  SG_ J1772ACCurrentLimit : 0|16@1+ (1,0) [0|0] "AmpAC"  CANedge
 
-BO_ 235 BMS12: 8 BMS
+BO_ 251 BMS12: 8 BMS
  SG_ RequestedFanSpeed : 56|8@1+ (1,0) [0|6] ""  CANedge
  SG_ PowerInputVoltage : 16|16@1+ (0.1,0) [0|0] "V"  CANedge
  SG_ MinimumCellVoltage : 0|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
  SG_ FanVoltage : 32|16@1+ (0.01,0) [0|0] "V"  CANedge
  SG_ FanSpeed : 48|8@1+ (1,0) [0|6] ""  CANedge
 
-BO_ 234 BMS11: 8 BMS
+BO_ 250 BMS11: 8 BMS
  SG_ MaximumCellVoltage : 48|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
  SG_ AdaptiveTotalCapacity : 0|16@1+ (0.1,0) [0|0] "Ah"  CANedge
  SG_ AdaptiveSOC : 32|8@1+ (0.5,0) [0|100] "%"  CANedge
  SG_ AdaptiveAmphours : 16|16@1+ (0.1,0) [0|0] "Ah"  CANedge
 
-BO_ 233 BMS10: 8 BMS
+BO_ 249 BMS10: 8 BMS
  SG_ LowCellResistanceID : 32|8@1+ (1,0) [1|180] ""  CANedge
  SG_ LowCellInternalResistance : 0|16@1+ (0.01,0) [0|0] "mOhm"  CANedge
  SG_ HighCellResistanceID : 40|8@1+ (1,0) [1|180] ""  CANedge
  SG_ HighCellInternalResistance : 16|16@1+ (0.01,0) [0|0] "mOhm"  CANedge
  SG_ AverageCellInternalResistance : 48|16@1+ (0.01,0) [0|0] "mOhm"  CANedge
 
-BO_ 232 BMS9: 8 BMS
+BO_ 248 BMS9: 8 BMS
  SG_ LowCellOpenVoltageID : 32|8@1+ (1,0) [1|180] ""  CANedge
  SG_ LowCellOpenVoltage : 0|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
  SG_ HighCellOpenVoltageID : 40|8@1+ (1,0) [1|180] ""  CANedge
  SG_ HighCellOpenVoltage : 16|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
  SG_ AverageCellOpenVoltage : 48|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
 
-BO_ 231 BMS8: 8 BMS
+BO_ 247 BMS8: 8 BMS
  SG_ LowCellVoltageID : 32|8@1+ (1,0) [1|180] ""  CANedge
  SG_ LowCellVoltage : 0|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
  SG_ HighCellVoltageID : 40|8@1+ (1,0) [1|180] ""  CANedge
  SG_ HighCellVoltage : 16|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
  SG_ AverageCellVoltage : 48|16@1+ (0.0001,0) [0|6.5535] "V"  CANedge
 
-BO_ 230 BMS7: 6 BMS
+BO_ 246 BMS7: 6 BMS
  SG_ LowestThermID_BMS : 24|8@1+ (1,0) [1|80] ""  CANedge
  SG_ LowestTemp_BMS : 16|8@1- (1,0) [0|255] "C"  CANedge
  SG_ InternalTemp_BMS : 40|8@1- (1,0) [0|255] "C"  CANedge
@@ -107,38 +107,38 @@ BO_ 230 BMS7: 6 BMS
  SG_ HighestTemp_BMS : 0|8@1- (1,0) [0|255] "C"  CANedge
  SG_ AverageTemp_BMS : 32|8@1- (1,0) [0|255] "C"  CANedge
 
-BO_ 229 BMS6: 8 BMS
+BO_ 245 BMS6: 8 BMS
  SG_ MaximumPackDCL : 16|16@1+ (1,0) [0|0] "A"  CANedge
  SG_ MaximumPackCCL : 32|16@1+ (1,0) [0|0] "A"  CANedge
  SG_ CurrentLimitStatus : 0|16@1+ (1,0) [0|65535] ""  CANedge
  SG_ AveragePackCurrent : 48|16@1+ (0.1,0) [0|0] "A"  CANedge
 
-BO_ 228 BMS5: 8 BMS
+BO_ 244 BMS5: 8 BMS
  SG_ TotalPackCycles : 48|16@1+ (1,0) [0|0] "cycle"  CANedge
  SG_ PackSummedVoltage : 0|16@1+ (0.1,0) [0|0] "V"  CANedge
  SG_ MinimumPackVoltage : 32|16@1+ (0.1,0) [0|0] "V"  CANedge
  SG_ MaximumPackVoltage : 16|16@1+ (0.1,0) [0|0] "V"  CANedge
 
-BO_ 227 BMS4: 7 BMS
+BO_ 243 BMS4: 7 BMS
  SG_ PackSOH : 48|8@1+ (1,0) [0|100] "%"  CANedge
  SG_ PackSOC : 32|8@1+ (0.5,0) [0|100] "%"  CANedge
  SG_ PackResistance : 16|16@1+ (1,0) [0|0] "mOhm"  CANedge
  SG_ PackDOD : 40|8@1+ (0.5,0) [0|100] "%"  CANedge
  SG_ PackAmphours : 0|16@1+ (0.1,0) [0|0] "Ahr"  CANedge
 
-BO_ 226 BMS3: 8 BMS
+BO_ 242 BMS3: 8 BMS
  SG_ TotalPackADC : 32|16@1+ (0.1,0) [0|0] "V"  CANedge
  SG_ PackVoltage : 16|16@1+ (0.1,0) [0|0] "V"  CANedge
  SG_ PackOpenVoltage : 48|16@1+ (0.1,0) [0|0] "V"  CANedge
  SG_ PackCurrent : 0|16@1+ (0.1,0) [0|0] "A"  CANedge
 
-BO_ 225 BMS2: 8 BMS
+BO_ 241 BMS2: 8 BMS
  SG_ PackDischargeCurrentLimitKW : 48|16@1+ (0.1,0) [0|0] "kW"  CANedge
  SG_ PackDischargeCurrentLimit : 32|16@1+ (1,0) [0|0] "A"  CANedge
  SG_ PackChargeCurrentLimitKW : 16|16@1+ (0.1,0) [0|0] "kW"  CANedge
  SG_ PackChargeCurrentLimit : 0|16@1+ (1,0) [0|0] "A"  CANedge
 
-BO_ 224 BMS1: 7 BMS
+BO_ 240 BMS1: 7 BMS
  SG_ RollingCounter_BMS : 48|8@1+ (1,0) [0|255] ""  CANedge
  SG_ PopulatedCells : 24|8@1+ (1,0) [0|255] ""  CANedge
  SG_ MaxCellNumber : 16|8@1+ (1,0) [0|255] ""  CANedge
@@ -333,24 +333,24 @@ CM_ BU_ BMS "BMS Master";
 CM_ BU_ INV "The Cascadia Motion inverter";
 CM_ BU_ U2C "Delphi DC/DC Converter";
 CM_ BU_ VCU "The system vehicle control unit";
-CM_ SG_ 229 CurrentLimitStatus "This value is provided so the reasons for why a current limit (either Charge Current Limit or Discharge Current Limit are being reduced by the BMS from the maximum allowable current.";
-CM_ SG_ 229 AveragePackCurrent "This is the AVERAGE current pack amperage value for the battery pack. This will report a constant 0 if no current sensor is selected. The average is taken over the last 1 second of operation so it will lag the instantaneous pack current value.";
-CM_ SG_ 228 TotalPackCycles "This is the total number of cycles that the battery pack has been put through since the BMS has started keeping track.";
-CM_ SG_ 228 PackSummedVoltage "This value is the sum of all the cells being monitored by the BMS. This is different from the Pack Voltage value because that is derived from the redundant total pack voltage sensor rather than summing up all of the cells.";
-CM_ SG_ 228 MinimumPackVoltage "This value is the minimum pack voltage that the BMS is using to limit how low the pack voltage is allowed to be pulled down to.";
-CM_ SG_ 228 MaximumPackVoltage "This value is the maximum pack voltage that the BMS is using to limit how high the pack voltage can be.";
-CM_ SG_ 227 PackDOD "This value reperesents the total pack depth of discharge (that is, the total percent of the battery that has been discharged to this point). This value does not account for any Drift.";
-CM_ SG_ 227 PackAmphours "This is the calculated number of amphours remaining in the battery pack. This is used in part to calculate State of Charge.";
-CM_ SG_ 226 TotalPackADC "This is the raw voltage value from the total pack voltage sensor (NOT the sum of all the cell voltages). Only available on BMS models that support the separate total pack sensor.";
-CM_ SG_ 226 PackCurrent "This is the current pack amperage value for the battery pack. This will report a constant 0 if no current sensor is selected.";
-CM_ SG_ 225 PackDischargeCurrentLimitKW "This is the pack Charge Current Limit expressed in kilowatts.";
-CM_ SG_ 225 PackChargeCurrentLimitKW "This is the pack Charge Current Limit expressed in kilowatts.";
-CM_ SG_ 225 PackChargeCurrentLimit "The value is, by default, reported as a positive value from 0 to whatever the maximum charge current limit is set to.";
-CM_ SG_ 224 RollingCounter_BMS "This is a sanity-check value that increments automatically by 1 once every 100ms (maximum value is 255, after which it resets to 0 and starts again).";
-CM_ SG_ 224 PopulatedCells "This represents the total number of populated (active) cells in the BMS. This is can be equal to or lower than the Max Cell Number.";
-CM_ SG_ 224 MaxCellNumber "This value represents the maximum number of cells that the BMS is capable of supporting. This value is determined by what hardware version of the BMS was purchased.";
-CM_ SG_ 224 FailsafeStatuses "This parameter contains the status of all the BMS failsafe modes";
-CM_ SG_ 224 RelayState "This parameter contains the status (active state) of all the BMS outputs and inputs.";
+CM_ SG_ 245 CurrentLimitStatus "This value is provided so the reasons for why a current limit (either Charge Current Limit or Discharge Current Limit are being reduced by the BMS from the maximum allowable current.";
+CM_ SG_ 245 AveragePackCurrent "This is the AVERAGE current pack amperage value for the battery pack. This will report a constant 0 if no current sensor is selected. The average is taken over the last 1 second of operation so it will lag the instantaneous pack current value.";
+CM_ SG_ 244 TotalPackCycles "This is the total number of cycles that the battery pack has been put through since the BMS has started keeping track.";
+CM_ SG_ 244 PackSummedVoltage "This value is the sum of all the cells being monitored by the BMS. This is different from the Pack Voltage value because that is derived from the redundant total pack voltage sensor rather than summing up all of the cells.";
+CM_ SG_ 244 MinimumPackVoltage "This value is the minimum pack voltage that the BMS is using to limit how low the pack voltage is allowed to be pulled down to.";
+CM_ SG_ 244 MaximumPackVoltage "This value is the maximum pack voltage that the BMS is using to limit how high the pack voltage can be.";
+CM_ SG_ 243 PackDOD "This value reperesents the total pack depth of discharge (that is, the total percent of the battery that has been discharged to this point). This value does not account for any Drift.";
+CM_ SG_ 243 PackAmphours "This is the calculated number of amphours remaining in the battery pack. This is used in part to calculate State of Charge.";
+CM_ SG_ 242 TotalPackADC "This is the raw voltage value from the total pack voltage sensor (NOT the sum of all the cell voltages). Only available on BMS models that support the separate total pack sensor.";
+CM_ SG_ 242 PackCurrent "This is the current pack amperage value for the battery pack. This will report a constant 0 if no current sensor is selected.";
+CM_ SG_ 241 PackDischargeCurrentLimitKW "This is the pack Charge Current Limit expressed in kilowatts.";
+CM_ SG_ 241 PackChargeCurrentLimitKW "This is the pack Charge Current Limit expressed in kilowatts.";
+CM_ SG_ 241 PackChargeCurrentLimit "The value is, by default, reported as a positive value from 0 to whatever the maximum charge current limit is set to.";
+CM_ SG_ 240 RollingCounter_BMS "This is a sanity-check value that increments automatically by 1 once every 100ms (maximum value is 255, after which it resets to 0 and starts again).";
+CM_ SG_ 240 PopulatedCells "This represents the total number of populated (active) cells in the BMS. This is can be equal to or lower than the Max Cell Number.";
+CM_ SG_ 240 MaxCellNumber "This value represents the maximum number of cells that the BMS is capable of supporting. This value is determined by what hardware version of the BMS was purchased.";
+CM_ SG_ 240 FailsafeStatuses "This parameter contains the status of all the BMS failsafe modes";
+CM_ SG_ 240 RelayState "This parameter contains the status (active state) of all the BMS outputs and inputs.";
 CM_ BO_ 2553869184 "Thermistor General Broadcast";
 CM_ SG_ 2553869184 LowestThermID_General "Orion BMS2: Max number of thermistors supported per expansion module = 80";
 CM_ SG_ 2553869184 HighestThermID_General "Orion BMS2: Max number of thermistors supported per expansion module = 80";
