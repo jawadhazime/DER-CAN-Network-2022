@@ -1,0 +1,10 @@
+Function to convert torque and speed values for CAN Tx:
+
+void split2two(const CAN_message_t &msg, int value)
+{
+	//split across two bytes (255+255) 
+	int lb_val = (value*10) % 256;
+	int hb_val = (value*10) / 256;
+	msg.buf[0] = lb_val;
+	msg.buf[1]= hb_val;
+}
