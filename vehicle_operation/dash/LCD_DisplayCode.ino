@@ -7,7 +7,7 @@ FlexCAN_T4 <CAN2, RX_SIZE_256, TX_SIZE_16> Can0;
 
 // Display variables
 int temperature;
-int speedM;
+int WheelSpeed;
 float SOC;
 
 // Helper variables
@@ -18,20 +18,22 @@ const byte interruptPin = 21;
 volatile int BFault = LOW;
 bool waitReady = false; // VSM Wati state
 bool BMS, IMD, BSPD;
+float MC[8]; // holds values from Motor Controller messages
+int ws = 0;
 
 //---------------------------------------------------------------------------
 
-void DisplayTempSpeed(int temperature, int speedM) {
+void DisplayTempSpeed(int temperature, int wheelSpeed) {
 
    lcd.setCursor(0,1);
-   lcd.print ("Temp: ");
-   lcd.setCursor(5,1);
+   lcd.print ("T: "); //temperature
+   lcd.setCursor(2,1);
    lcd.print(temperature);
 
    lcd.setCursor(0,0);
-   lcd.print("Speed: ");
-   lcd.setCursor(6,0);
-   lcd.print(speedM);
+   lcd.print("WS: "); // wheel speed
+   lcd.setCursor(3,0);
+   lcd.print(wheelSpeed);
    i++;
 }
 
@@ -39,15 +41,16 @@ void DisplayTempSpeed(int temperature, int speedM) {
 
 void DisplaySOC(float SOC){
   
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("SOC: ");   
-  lcd.setCursor(5,0);
+  lcd.setCursor(0,3);
+  lcd.print("SC: ");   
+  lcd.setCursor(0,5);
   lcd.print(SOC);
 }
 
 //---------------------------------------------------------------------------
 /*
+//Fault functons, ignore mess
+
 void BMSfault(){
  BFault = HIGH;
  BMS = true;
@@ -76,7 +79,7 @@ struct potentiometer {
 struct message {
   CAN_message_t msg;
   int num;
-} ws;
+} WS;
 
 //---------------------------------------------------------------------------
 
@@ -90,7 +93,29 @@ Serial.print(" MB "); Serial.print(msg.mb);
   Serial.print(" TS: "); Serial.print(msg.timestamp);
   Serial.print(" ID: "); Serial.print(msg.id, HEX);
   Serial.print(" Buffer: ");
-  for ( uint8_t i = 0; i < msg.len; i++ ) {
+// New Portion
+  if(msg.id == 0xD0){ for ( uint8_t i = 0; i < 8; i++ ) {
+    Serial.print(msg.buf[i], HEX); Serial.print(" ");
+       MC[i]= msg.buf[i]; // copies MC values to variable
+      for (int j = 2; j < 5; i++){
+        ws = ws + MC[i]; // adds wheel speed values together
+          }
+      } Serial.println();
+    Serial.println("Your value is: "); Serial.print(message_val, HEX);
+    /*
+  }else if (msg.id ==  0x1839F380) { for ( uint8_t i = 0; i < 8; i++ ) {
+    Serial.print(msg.buf[i], HEX); Serial.print(" ");
+   */ 
+  }
+
+ 
+    
+  }
+
+
+/*
+// OLD CODE
+   for ( uint8_t i = 0; i < msg.len; i++ ) {
     Serial.print(msg.buf[i], HEX); Serial.print(" ");
     if (i == 0) {
       message_val = msg.buf[i];
@@ -98,16 +123,15 @@ Serial.print(" MB "); Serial.print(msg.mb);
   } Serial.println();
     Serial.println("Your value is: "); Serial.print(message_val, HEX);
 
-  // Set vehucle state machine message from the motor controller
-  if(msg.id == 0x0AA){
-    ws.msg = msg;
-    ws.num = message_val;
+
+    
+  if(msg.id == 0xD0){
+    for(int i =1; i< 5, i++){
+     ws_i.msg = msg;
+    ws_i.num = message_val;
     if(ws.num == 4){waitReady = true;}
-  }
-
-
-}
-
+    }
+ */
 
 
 //---------------------------------------------------------------------------
@@ -159,26 +183,11 @@ void loop() {
     Serial.print("  TS: "); Serial.println(msg.timestamp);
    }
  Can0.read(msg); 
-  //speedM = ws.msg.id;
   canSniff(msg);
 
   
   temperature = 5;
-  speedM= ws.num;
-  DisplayTempSpeed(temperature, speedM);
+  WheelSpeed= ws/4;
+  DisplayTempSpeed(temperature, WheelSpeed);
   
 }
-
-/* what code needs to do 
-
-display mean wheel speed
-
-display mean battery temperature
-
-display SOC on an interval
-
-fault detection and display
-
-
-
- */
